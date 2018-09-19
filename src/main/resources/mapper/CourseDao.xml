@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hfut.issf.grade.dao.CourseDao">
+    <resultMap id="baseMap" type="course">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="num" property="num"/>
+        <result column="type" property="type"/>
+        <result column="module" property="module"/>
+        <result column="credit" property="credit"/>
+        <result column="start_semester" property="startSemester"/>
+        <result column="suggest_semester" property="suggestSemester"/>
+        <result column="required" property="isRequired"/>
+        <result column="department" property="department"/>
+    </resultMap>
+    <sql id="baseSql">
+        id,name,num,type,module,credit,start_semester,suggest_semester,required,department
+    </sql>
+    <select id="selectAll" resultMap="baseMap">
+        select
+        <include refid="baseSql"/>
+        from course;
+    </select>
+    <select id="selectById" resultMap="baseMap">
+        select
+        <include refid="baseSql"/>
+        from course
+        where id = #{id};
+
+    </select>
+    <select id="selectByNum" resultMap="baseMap">
+        select
+        <include refid="baseSql"/>
+        from course
+        where num = #{num};
+
+    </select>
+    <insert id="insert" parameterType="course">
+        insert into course(name, num, type, "module", credit, start_semester, suggest_semester, required, department)
+        values (#{name},#{num},#{type},#{module},#{credit},#{startSemester},#{suggestSemester},#{isRequired},#{department});
+    </insert>
+</mapper>

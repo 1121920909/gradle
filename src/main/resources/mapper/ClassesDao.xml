@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hfut.issf.grade.dao.ClassesDao">
+    <resultMap id="baseMap" type="classes">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="courseId" column="course_id"/>
+        <result property="semester" column="semester"/>
+    </resultMap>
+    <sql id="baseSql">
+        id,name,course_id,semester
+    </sql>
+
+    <insert id="insert" parameterType="classes" useGeneratedKeys="true" keyProperty="id">
+        insert into classes(course_id, semester, name)
+        values(#{courseId},#{semester},#{name});
+    </insert>
+
+    <select id="selectAllClasses" resultType="classes">
+        select
+        <include refid="baseSql"/>
+        from classes;
+    </select>
+
+    <select id="selectById" resultType="classes">
+        select
+        <include refid="baseSql"/>
+        from classes
+        where id = #{id};
+    </select>
+
+    <select id="hasNum" resultType="int">
+        select count(*)
+        from classes
+        where name = #{num};
+    </select>
+
+    <select id="selectByNum" resultType="classes">
+        select
+        <include refid="baseSql"/>
+        from classes
+        where name = #{num};
+    </select>
+</mapper>

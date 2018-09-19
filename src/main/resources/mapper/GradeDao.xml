@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hfut.issf.grade.dao.GradeDao">
+    <select id="selectAll" resultType="grade">
+        select *
+        from gradle;
+    </select>
+
+    <select id="selectGrade" resultType="grade">
+        select *
+        from gradle g
+        <where>
+            <if test="stuNum != null">
+                g.student_num = #{stuNum}
+            </if>
+            <if test="courseName != null">
+                g.course_name = #{courseName}
+            </if>
+            <if test="courseType != null">
+                g.course_type = #{courseType}
+            </if>
+            <if test="isRequired != -1">
+                g.course_required = #{isRequired}
+            </if>
+            <if test="semester != null">
+                g.semester = #{semester}
+            </if>
+        </where>
+    </select>
+</mapper>
