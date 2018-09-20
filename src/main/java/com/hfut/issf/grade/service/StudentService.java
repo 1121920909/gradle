@@ -1,9 +1,7 @@
 package com.hfut.issf.grade.service;
 
 import com.hfut.issf.grade.dao.*;
-import com.hfut.issf.grade.domain.Classes;
-import com.hfut.issf.grade.domain.Course;
-import com.hfut.issf.grade.domain.CourseChoosing;
+import com.hfut.issf.grade.domain.*;
 import com.hfut.issf.grade.util.Crawler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +19,7 @@ public class StudentService {
     private final StudentDao studentDao;
     private final CourseChoosingDao choosingDao;
     private final UserDao userDao;
+    private final GradeDao gradeDao;
 
     @Autowired
     public StudentService(Crawler crawler,
@@ -28,13 +27,46 @@ public class StudentService {
                           CourseDao courseDao,
                           StudentDao studentDao,
                           CourseChoosingDao choosingDao,
-                          UserDao userDao) {
+                          UserDao userDao,
+                          GradeDao gradeDao) {
         this.crawler = crawler;
         this.classesDao = classesDao;
         this.courseDao = courseDao;
         this.studentDao = studentDao;
         this.choosingDao = choosingDao;
         this.userDao = userDao;
+        this.gradeDao = gradeDao;
+    }
+
+    /** 查询学生课程成绩
+     * @param stuNum 学号
+     * @param courseName 课程名称
+     * @param courseType 课程类别
+     * @param isRequired 是否必修
+     * @param className 教学班
+     * @param semester 学期
+     * @return List
+     */
+    public List<Grade> getGrades(String stuNum,
+                                String courseName,
+                                String courseType,
+                                int isRequired,
+                                String className,
+                                String semester) {
+        return gradeDao.selectGrade(stuNum,
+                courseName,
+                courseType,
+                isRequired,
+                className,
+                semester);
+    }
+
+    /** 查询用户成绩
+     * @param username 用户名
+     * @return student
+     */
+    public Student getStudentInfo(String username) {
+        return studentDao.selectByUserId(userDao.selectByUserName(username).getId());
     }
 
     /** 从教务系统爬去用户成绩信息
@@ -43,12 +75,13 @@ public class StudentService {
      * @param userName 用户名
      */
     public void crawlerGrade(String stuNum, String password, String userName) {
-        Map<String,List> semesterMap = null;
-        try {
-            semesterMap = crawler.getGrade(stuNum, password);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+        Map map = crawler.crawler(userName, password);
+        Student student = (Student) map.get("stuInfo");
+        Map<String,List> semesterMap =(Map) map.get("grade");
+        List<Course> courseList = (List<Course>) map.get("course");
+        int userId = userDao.selectByUserName(userName).getId();
+
+
         if (semesterMap != null) {
             //TODO 抛出一个异常
         }

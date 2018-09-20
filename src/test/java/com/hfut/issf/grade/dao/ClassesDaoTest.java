@@ -12,10 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
 public class ClassesDaoTest {
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     ClassesDao classesDao;
 

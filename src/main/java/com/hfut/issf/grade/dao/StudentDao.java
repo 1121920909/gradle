@@ -29,4 +29,11 @@ public interface StudentDao {
      * @return
      */
     int insert(Student student);
+
+
+    /** 根据学号查询学生
+     * @param stuNum 学号
+     * @return
+     */
+    Student selectByStuNum(String stuNum);
 }

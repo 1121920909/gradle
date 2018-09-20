@@ -6,7 +6,7 @@ import lombok.Data;
 public class Student {
     int id;
     int userId;
-    int num;
+    String num;
     String name;
     String sex;
     String grade;
