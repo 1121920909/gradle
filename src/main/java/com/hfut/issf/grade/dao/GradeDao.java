@@ -27,5 +27,6 @@ public interface GradeDao {
                             @Param("courseType") String courseType,
                             @Param("isRequired") int isRequired,
                             @Param("className") String className,
-                            @Param("semester") String semester);
+                            @Param("semester") String semester,
+                            @Param("courseNum")String courseNum);
 }

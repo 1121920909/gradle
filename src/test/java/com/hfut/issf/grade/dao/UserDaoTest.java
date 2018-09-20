@@ -23,4 +23,10 @@ public class UserDaoTest {
         List<User> list = dao.selectAll();
         log.info("student list: {}",list);
     }
+
+    @Test
+    public void selectRole() {
+        List<String> roles = dao.selectAuthenticationById(1);
+        log.info("roles: {}",roles);
+    }
 }

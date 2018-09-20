@@ -140,9 +140,8 @@ public class Crawler {
             }
         } catch (IOException  e) {
             e.printStackTrace();
-        } finally {
-            return gradeMap;
         }
+        return gradeMap;
 
     }
 

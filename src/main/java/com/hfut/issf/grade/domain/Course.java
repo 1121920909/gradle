@@ -8,10 +8,7 @@ public class Course {
     String name;
     String num;
     String type;
-    String module;
     String credit;
-    String startSemester;
-    String suggestSemester;
     boolean isRequired;
     String department;
 }

@@ -35,4 +35,9 @@ public interface ClassesDao {
     Classes selectByNum(String num);
 
     int insert(Classes classes);
+
+    /** 查询所有学期
+     * @return semester string list
+     */
+    List<String> selectAllSemester();
 }

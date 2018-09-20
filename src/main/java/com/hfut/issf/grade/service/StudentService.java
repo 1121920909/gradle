@@ -5,6 +5,7 @@ import com.hfut.issf.grade.domain.*;
 import com.hfut.issf.grade.util.Crawler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Service
+@Transactional
 public class StudentService {
     private final Crawler crawler;
     private final ClassesDao classesDao;
@@ -52,13 +54,15 @@ public class StudentService {
                                 String courseType,
                                 int isRequired,
                                 String className,
-                                String semester) {
+                                String semester,
+                                String courseNum) {
         return gradeDao.selectGrade(stuNum,
                 courseName,
                 courseType,
                 isRequired,
                 className,
-                semester);
+                semester,
+                courseNum);
     }
 
     /** 查询用户成绩
@@ -79,11 +83,31 @@ public class StudentService {
         Student student = (Student) map.get("stuInfo");
         Map<String,List> semesterMap =(Map) map.get("grade");
         List<Course> courseList = (List<Course>) map.get("course");
+        //获取登陆用户id
         int userId = userDao.selectByUserName(userName).getId();
+        //如果该用户已经绑定了一个student就更新student否则新增一个
+        student.setUserId(userId);
+        Student pristine = studentDao.selectByUserId(userId);
+        if (pristine == null) {
+            studentDao.insert(student);
+        }else{
+            studentDao.update(student);
+        }
+        //将所选课程中没有的添加到数据库
+        for (Course course : courseList) {
+            //获取课程代码的最后一位，如果是B为必修，否则为选修
+            char lastChar = course.getNum().toCharArray()[course.getNum().length() - 1];
+            if (lastChar == 'B') {
+                course.setRequired(true);
+            }else {
+                course.setRequired(false);
+            }
+            if(courseDao.selectByNum(course.getNum()) == null){
+                courseDao.insert(course);
+            }else{
+                courseDao.update(course);
+            }
 
-
-        if (semesterMap != null) {
-            //TODO 抛出一个异常
         }
         //所有学期的集合
         Set<String> semesterSet = semesterMap.keySet();
@@ -98,24 +122,38 @@ public class StudentService {
                 if (classes == null) {
                     String courseNum = courseMap.get("courseNum");
                     Course course = courseDao.selectByNum(courseNum);
-                    if (course == null) {
-                        //TODO 抛出异常
-                    }
                     classes = new Classes();
                     classes.setCourseId(course.getId());
-                    classes.setName(courseNum);
+                    classes.setName(classNum);
                     classes.setSemester(semester);
                     classesDao.insert(classes);
                 }
                 CourseChoosing choosing = new CourseChoosing();
                 choosing.setClassesId(classes.getId());
                 choosing.setGpa(Double.parseDouble(courseMap.get("gpa")));
-                choosing.setGrade(Integer.parseInt(courseMap.get("grade")));
+                choosing.setGrade(courseMap.get("grade"));
                 choosing.setStudentId(studentDao.selectByUserId(userDao.selectByUserName(userName).getId()).getId());
-                choosingDao.insert(choosing);
+                if (choosingDao.selectByStuIdAndClassId(choosing.getStudentId(), choosing.getClassesId()) == null) {
+                    choosingDao.insert(choosing);
+                }else{
+                    choosingDao.update(choosing);
+                }
             }
         }
     }
 
 
+    /** 获取所有课程类型
+     * @return
+     */
+    public List<String> getALlCourseType() {
+        return courseDao.selectAllType();
+    }
+
+    /** 获取所有学期
+     * @return
+     */
+    public List<String> getAllSemester() {
+        return classesDao.selectAllSemester();
+    }
 }

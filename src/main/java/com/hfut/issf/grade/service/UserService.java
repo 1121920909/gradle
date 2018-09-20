@@ -38,8 +38,8 @@ public class UserService implements UserDetailsService {
         User user = new User();
         user.setUserName(username);
         user.setPassword(encodingPassword);
-        int id = userDao.insertUser(user);
-        userDao.insertRoles(id, userDao.selectRoleId("user"));
+        userDao.insertUser(user);
+        userDao.insertRoles(user.getId(), userDao.selectRoleId("user"));
         return user;
     }
 

@@ -7,7 +7,7 @@
         from user
     </select>
 
-    <select id="selectAuthenticationById" resultType="list">
+    <select id="selectAuthenticationById" resultType="string">
         select r.role
         from authentication a ,
              roles r
@@ -25,12 +25,12 @@
         where roles.role = #{role};
     </select>
 
-    <insert id="insertUser" parameterType="user">
+    <insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="id">
         insert into user(username, password)
         values (#{userName},#{password})
     </insert>
 
-    <insert id="insertRoles" parameterType="user" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertRoles" parameterType="user">
         insert into authentication(user_id, roles_id)
         values (#{userId},#{roleId});
     </insert>

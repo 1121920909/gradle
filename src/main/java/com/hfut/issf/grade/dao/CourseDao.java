@@ -27,8 +27,19 @@ public interface CourseDao {
 
 
     /**插入课程
-     * @param coures
+     * @param course
      * @return
      */
-    int insert(Course coures);
+    int insert(Course course);
+
+    /** 更新课程信息
+     * @param course
+     * @return
+     */
+    int update(Course course);
+
+    /** 获取所有课程类型
+     * @return string list
+     */
+    List<String> selectAllType();
 }

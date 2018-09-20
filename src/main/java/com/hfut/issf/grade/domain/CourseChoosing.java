@@ -7,6 +7,6 @@ public class CourseChoosing {
     int id;
     int studentId;
     int classesId;
-    int grade;
+    String grade;
     double gpa;
 }

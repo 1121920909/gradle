@@ -6,16 +6,18 @@
         <result column="name" property="name"/>
         <result column="num" property="num"/>
         <result column="type" property="type"/>
-        <result column="module" property="module"/>
         <result column="credit" property="credit"/>
-        <result column="start_semester" property="startSemester"/>
-        <result column="suggest_semester" property="suggestSemester"/>
         <result column="required" property="isRequired"/>
         <result column="department" property="department"/>
     </resultMap>
     <sql id="baseSql">
-        id,name,num,type,module,credit,start_semester,suggest_semester,required,department
+        id,name,num,type,credit,required,department
     </sql>
+    <update id="update" parameterType="course">
+        update course
+        set name = #{name},type = #{type},credit = #{credit},required = #{isRequired},department = #{department}
+        where num = #{num}
+    </update>
     <select id="selectAll" resultMap="baseMap">
         select
         <include refid="baseSql"/>
@@ -35,8 +37,13 @@
         where num = #{num};
 
     </select>
+    <select id="selectAllType" resultType="string">
+        select type
+        from course
+        group by type;
+    </select>
     <insert id="insert" parameterType="course">
-        insert into course(name, num, type, "module", credit, start_semester, suggest_semester, required, department)
-        values (#{name},#{num},#{type},#{module},#{credit},#{startSemester},#{suggestSemester},#{isRequired},#{department});
+        insert into course(name, num, type, credit, required, department)
+        values (#{name},#{num},#{type},#{credit},#{isRequired},#{department});
     </insert>
 </mapper>

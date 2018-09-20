@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hfut.issf.grade.dao.StudentDao">
+    <update id="update" parameterType="student">
+        update student
+        set num = #{num},name = #{name},sex = #{sex},grade = #{grade},major = #{major},class = #{className}
+        where id = #{id}
+    </update>
+
+    <select id="selectAll" resultType="student">
+        select *
+        from student
+    </select>
+
+    <select id="selectByStuNum" resultType="student">
+        select *
+        from student
+        where num = #{stuNum}
+    </select>
+
+    <select id="selectById" resultType="student">
+        select *
+        from student
+        where id = #{id};
+    </select>
+
+    <select id="selectByUserId" resultType="student">
+        select *
+        from student
+        where user_id = #{id};
+    </select>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="student">
+        insert into student(user_id, num, name, sex, grade, major, class)
+        values (#{userId},#{num},#{name},#{sex},#{grade},#{major},#{className})
+    </insert>
+</mapper>

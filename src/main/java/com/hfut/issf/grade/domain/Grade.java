@@ -11,6 +11,7 @@ public class Grade {
     boolean courseRequired;
     String className;
     String semester;
-    int grade;
+    String grade;
+    String courseNum;
     double gpa;
 }

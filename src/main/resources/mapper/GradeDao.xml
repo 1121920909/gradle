@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hfut.issf.grade.dao.GradeDao">
-    <select id="selectAll" resultType="grade">
+    <resultMap id="baseMap" type="grade">
+        <result property="studentNum" column="student_num"/>
+        <result property="courseName" column="course_name"/>
+        <result property="credit" column="credit"/>
+        <result property="courseType" column="course_type"/>
+        <result property="courseRequired" column="course_required"/>
+        <result property="className" column="class_name"/>
+        <result property="semester" column="semester"/>
+        <result property="grade" column="grade"/>
+        <result property="courseName" column="course_num"/>
+        <result property="gpa" column="gpa"/>
+    </resultMap>
+    <select id="selectAll" resultMap="baseMap">
         select *
         from gradle;
     </select>
-
-    <select id="selectGrade" resultType="grade">
+    <select id="selectGrade" resultMap="baseMap">
         select *
         from gradle g
         <where>
@@ -14,16 +25,19 @@
                 g.student_num = #{stuNum}
             </if>
             <if test="courseName != null">
-                g.course_name = #{courseName}
+                and g.course_name = #{courseName}
             </if>
             <if test="courseType != null">
-                g.course_type = #{courseType}
+                and g.course_type = #{courseType}
             </if>
             <if test="isRequired != -1">
-                g.course_required = #{isRequired}
+                and g.course_required = #{isRequired}
             </if>
             <if test="semester != null">
-                g.semester = #{semester}
+                and g.semester = #{semester}
+            </if>
+            <if test="courseNum != null">
+                and g.course_num = #{courseNum}
             </if>
         </where>
     </select>

@@ -41,4 +41,9 @@
         from classes
         where name = #{num};
     </select>
+    <select id="selectAllSemester" resultType="string">
+        select semester
+        from classes
+        group by semester
+    </select>
 </mapper>

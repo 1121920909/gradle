@@ -5,4 +5,14 @@
         insert into course_choosing(student_id, classes_id, grade, gpa)
         values (#{studentId},#{classesId},#{grade},#{gpa});
     </insert>
+    <update id="update" parameterType="courseChoosing">
+        update course_choosing
+        set grade = #{grade},gpa = #{gpa}
+        where student_id = #{studentId} and classes_id = #{classesId};
+    </update>
+    <select id="selectByStuIdAndClassId" resultType="courseChoosing">
+        select *
+        from course_choosing
+        where student_id = #{stuId} and classes_id = #{classId}
+    </select>
 </mapper>

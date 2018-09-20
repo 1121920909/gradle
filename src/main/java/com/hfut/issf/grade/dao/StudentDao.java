@@ -30,6 +30,11 @@ public interface StudentDao {
      */
     int insert(Student student);
 
+    /** 更新学生信息
+     * @param student 学生
+     * @return
+     */
+    int update(Student student);
 
     /** 根据学号查询学生
      * @param stuNum 学号
