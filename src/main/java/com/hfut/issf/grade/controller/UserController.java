@@ -16,7 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.jws.WebParam;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -31,6 +30,11 @@ public class UserController {
     public UserController(UserService userService, StudentService studentService) {
         this.userService = userService;
         this.studentService = studentService;
+    }
+
+    @GetMapping("/")
+    public String index() {
+        return "redirect:/student/queryGrade";
     }
 
     @GetMapping("/login")
@@ -70,13 +74,16 @@ public class UserController {
             semester = query.getSemester().equals("") ? null : query.getSemester();
             courseNum = query.getCourseNum().equals("") ? null : query.getCourseNum();
         }
-        List<Grade> gradeList = studentService.getGrades(student.getNum(),
-                courseName,
-                courseType,
-                -1,
-                null,
-                semester,
-                courseNum);
+        List<Grade> gradeList = new ArrayList<>();
+        if (student != null) {
+            gradeList = studentService.getGrades(student.getNum(),
+                                                        courseName,
+                                                        courseType,
+                                                        -1,
+                                                        null,
+                                                        semester,
+                                                        courseNum);
+        }
         model.addAttribute("courseTypes", courseTypes);
         model.addAttribute("semesters", semesters);
         model.addAttribute("gradeList", gradeList);
@@ -125,10 +132,13 @@ public class UserController {
         model.addAttribute("courseTypeList", courseTypes);
         model.addAttribute("semesterList", semesters);
         List<Grade> gradeList = new ArrayList<>();
-        String stuNum = studentService.getStudentInfo(principal.getName()).getNum();
-        for (String semeste : form.getSemesters()) {
-            for (String type : form.getCourseType()) {
-                gradeList.addAll(studentService.getGrades(stuNum, null, type, -1, null, semeste, null));
+        Student student = studentService.getStudentInfo(principal.getName());
+        if (student != null) {
+            String stuNum = student.getNum();
+            for (String semeste : form.getSemesters()) {
+                for (String type : form.getCourseType()) {
+                    gradeList.addAll(studentService.getGrades(stuNum, null, type, -1, null, semeste, null));
+                }
             }
         }
         double credit = 0;

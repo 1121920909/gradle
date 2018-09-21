@@ -10,7 +10,7 @@
         <result property="className" column="class_name"/>
         <result property="semester" column="semester"/>
         <result property="grade" column="grade"/>
-        <result property="courseName" column="course_num"/>
+        <result property="courseNum" column="course_num"/>
         <result property="gpa" column="gpa"/>
     </resultMap>
     <select id="selectAll" resultMap="baseMap">

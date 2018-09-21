@@ -78,6 +78,7 @@
                     <thead>
                     <tr>
                         <td>课程名称</td>
+                        <td>课程代码</td>
                         <td>学分</td>
                         <td>课程类型</td>
                         <td>教学班</td>
@@ -89,6 +90,7 @@
                     <tbody>
                     <tr th:each="grade:${gradeList}">
                         <td th:text="${grade.courseName}"/>
+                        <td th:text="${grade.courseNum}"/>
                         <td th:text="${grade.credit}"/>
                         <td th:text="${grade.courseType}"/>
                         <td th:text="${grade.className}"/>
